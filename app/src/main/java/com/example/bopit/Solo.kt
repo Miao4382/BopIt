@@ -1,5 +1,10 @@
 package com.example.bopit
 
+import android.content.Context
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.os.AsyncTask
 import android.os.AsyncTask.execute
 import android.os.Bundle
@@ -14,7 +19,7 @@ import java.util.concurrent.TimeUnit
 import kotlin.random.Random
 
 
-class Solo : AppCompatActivity() {
+class Solo : AppCompatActivity(), SensorEventListener{
 
     private var randomNum: Int = 0
     private var keepplaying: Boolean = true
@@ -22,14 +27,18 @@ class Solo : AppCompatActivity() {
     var currentTime: Int = 0
     val interval: Int = 4
 
+    // sensor related
+    private lateinit var sensorManager: SensorManager
+    private var accelerometer: Sensor? = null
 
-    val timer = object: CountDownTimer(4000, 1000) {
+
+/*    val timer = object: CountDownTimer(4000, 1000) {
         override fun onTick(millisUntilFinished: Long) {}
 
         override fun onFinish() {
             keepplaying = false
         }
-    }
+    }*/
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,8 +47,19 @@ class Solo : AppCompatActivity() {
 
         go.setOnClickListener {
             start_game()
-
         }
+
+        // get sensor manager
+        this.sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
+
+        // get accelerometer sensor and register listener
+        sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)?.let {
+            this.accelerometer = it
+        }
+        accelerometer?.also {
+            sensorManager.registerListener(this, it, SensorManager.SENSOR_DELAY_NORMAL)
+        }
+
     }
 
     fun start_game() {
@@ -86,6 +106,14 @@ class Solo : AppCompatActivity() {
             }
         }
 
+    }
+
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+
+    }
+
+    override fun onSensorChanged(event: SensorEvent?) {
+        // event is returned from system, it has info about the sensor triggered the reading
     }
 
 }
