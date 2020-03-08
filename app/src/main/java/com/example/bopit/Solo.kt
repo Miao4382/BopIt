@@ -21,9 +21,10 @@ class Solo : AppCompatActivity(), SensorEventListener{
 
     private var instrNum: Int = 0
     private var keepPlaying: Boolean = true
-    var startTime: Int = 0
-    var currentTime: Int = 0
-    val interval: Int = 4
+    private var startTime: Int = 0
+    private var currentTime: Int = 0
+    private val interval: Int = 2000
+    private var score: Int = 0
 
     // sensor related
     private lateinit var sensorManager: SensorManager
@@ -32,24 +33,15 @@ class Solo : AppCompatActivity(), SensorEventListener{
     // action state recording
     private var flipA: Boolean = false
     private var flipB: Boolean = false
-
-
-/*    val timer = object: CountDownTimer(4000, 1000) {
-        override fun onTick(millisUntilFinished: Long) {}
-
-        override fun onFinish() {
-            keepplaying = false
-        }
-    }*/
-
+    private var tapped: Boolean = false
+    private var shaked: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.solo_layout)
 
-        go.setOnClickListener {
-            start_game()
-        }
+        btnPlay.setOnClickListener { startGame() }
+        imgViewBopitSolo.setOnClickListener { tapped = true }
 
         // get sensor manager
         this.sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
@@ -62,75 +54,69 @@ class Solo : AppCompatActivity(), SensorEventListener{
             sensorManager.registerListener(this, it, SensorManager.SENSOR_DELAY_NORMAL)
         }
 
+
     }
 
-    fun start_game() {
-        doAsync{
+    /* start_game()
+    *
+    * */
+    private fun startGame() {
+        score = 0
+        DoAsync{
             //loop
             do {
                 // reset game state
                 resetGameState()
 
-                startTime = SimpleDateFormat("ss", Locale.getDefault()).format(Date()).toInt()
-                instrNum = Random.nextInt(1, 3)
+                startTime = (SimpleDateFormat("ss.SSS", Locale.getDefault()).format(Date()).toDouble() * 1000).toInt()
+                instrNum = Random.nextInt(1, 4)
 
                 //function for displaying the instruction (takes the random number as input)
 
-                textViewAction.post({displayInstruction(instrNum)})
+                textViewAction.post{displayInstruction(instrNum)}
 
                 do {
-                    currentTime = SimpleDateFormat("ss", Locale.getDefault()).format(Date()).toInt()
+                    currentTime = (SimpleDateFormat("ss.SSS", Locale.getDefault()).format(Date()).toDouble() * 1000).toInt()
                 } while (currentTime - startTime < interval)
 
-                Log.d("PlayGame", "timer ran out")
-                Log.d("Random", instrNum.toString())
+                // check if action performed
+                checkKeepPlay()
 
-                when (instrNum) {
-                    1 -> {  // shake it
-
-                    }
-
-                    2 -> {  // flip it
-                        keepPlaying = flipA && flipB
+                // display feedback and update score
+                if (keepPlaying) {
+                    textViewScore.post {
+                        displayRandomFeedBack()
+                        score += 1
+                        textViewScore.text = "Score: " + score.toString()
                     }
                 }
-
-                if (keepPlaying)
-                    textViewFeedBack.post { textViewFeedBack.text = textViewFeedBack.text.toString() + "!"}
-
             } while (keepPlaying)
 
-//            shakeTxt.text = "You lose"
-            textViewAction.post {textViewAction.text = "You lose"}
+            textViewAction.post {
+                textViewAction.text = "You lose"
+                textViewScore.text = "Final Score: " + score.toString()
+            }
         }
-
     }
 
     private fun resetGameState() {
         keepPlaying = false
         flipA = false
         flipB = false
+        tapped = false
+        shaked = false
     }
 
     private fun displayInstruction(rd: Int) {
         when (rd) {
-            1 -> {
-                textViewAction.setText("Shake it!")
-            }
+            1 -> { textViewAction.setText("Shake it!") }
 
-            2 -> {
-                textViewAction.setText("Flip it!")
-            }
+            2 -> { textViewAction.setText("Flip it!") }
 
-            3 -> {
-                textViewAction.setText("Spin it!")
-            }
+            3 -> { textViewAction.setText("Tap it!") }
 
-            4 -> {
-                textViewAction.setText("Tap it!")
-            }
+            4 -> { textViewAction.setText("Spin it!") }
         }
-
     }
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
@@ -142,7 +128,7 @@ class Solo : AppCompatActivity(), SensorEventListener{
         when (event?.sensor?.type) {
             Sensor.TYPE_ACCELEROMETER -> {
                 if (event.values[0].absoluteValue > 2) {
-                    keepPlaying = true
+                    shaked = true
                 }
 
                 if (event.values[2] < 0) {
@@ -157,9 +143,37 @@ class Solo : AppCompatActivity(), SensorEventListener{
         }
     }
 
+    // displayRandomFeedBack(): will display random feed back on succeed, also update the score
+    private fun displayRandomFeedBack() {
+        // show toast
+        when (Random.nextInt(1, 4)) {
+            1 -> { Toast.makeText(this, "Good Job!", Toast.LENGTH_SHORT).show()}
+            2 -> { Toast.makeText(this, "You're Awesome!", Toast.LENGTH_SHORT).show()}
+            3 -> { Toast.makeText(this, "Fantastic!", Toast.LENGTH_SHORT).show()}
+            4 -> { Toast.makeText(this, "Beautiful!", Toast.LENGTH_SHORT).show()}
+        }
+
+    }
+
+    // checkKeepPlay(): will check if we continue play or not
+    private fun checkKeepPlay() {
+        when (instrNum) {
+            1 -> {  // shake it
+                keepPlaying = shaked
+            }
+
+            2 -> {  // flip it
+                keepPlaying = flipA && flipB
+            }
+
+            3 -> {  // tap it (tap the toy)
+                keepPlaying = tapped
+            }
+        }
+    }
 }
 
-class doAsync(val handler: () -> Unit) : AsyncTask<Void, Void, Void>() {
+class DoAsync(val handler: () -> Unit) : AsyncTask<Void, Void, Void>() {
     init {
         execute()
     }
