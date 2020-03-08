@@ -8,6 +8,7 @@ import android.hardware.SensorManager
 import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.solo_layout.*
 import java.text.SimpleDateFormat
@@ -18,15 +19,19 @@ import kotlin.random.Random
 
 class Solo : AppCompatActivity(), SensorEventListener{
 
-    private var randomNum: Int = 0
+    private var instrNum: Int = 0
     private var keepPlaying: Boolean = true
     var startTime: Int = 0
     var currentTime: Int = 0
-    val interval: Int = 2
+    val interval: Int = 4
 
     // sensor related
     private lateinit var sensorManager: SensorManager
     private var accelerometer: Sensor? = null
+
+    // action state recording
+    private var flipA: Boolean = false
+    private var flipB: Boolean = false
 
 
 /*    val timer = object: CountDownTimer(4000, 1000) {
@@ -63,47 +68,66 @@ class Solo : AppCompatActivity(), SensorEventListener{
         doAsync{
             //loop
             do {
-                // reset keepplaying
-                keepPlaying = false
+                // reset game state
+                resetGameState()
 
                 startTime = SimpleDateFormat("ss", Locale.getDefault()).format(Date()).toInt()
-                randomNum = Random.nextInt(1, 5)
+                instrNum = Random.nextInt(1, 3)
 
                 //function for displaying the instruction (takes the random number as input)
 
-                shakeTxt.post({displayInstruction(randomNum)})
+                textViewAction.post({displayInstruction(instrNum)})
 
                 do {
                     currentTime = SimpleDateFormat("ss", Locale.getDefault()).format(Date()).toInt()
                 } while (currentTime - startTime < interval)
 
                 Log.d("PlayGame", "timer ran out")
-                Log.d("Random", randomNum.toString())
+                Log.d("Random", instrNum.toString())
+
+                when (instrNum) {
+                    1 -> {  // shake it
+
+                    }
+
+                    2 -> {  // flip it
+                        keepPlaying = flipA && flipB
+                    }
+                }
+
+                if (keepPlaying)
+                    textViewFeedBack.post { textViewFeedBack.text = textViewFeedBack.text.toString() + "!"}
 
             } while (keepPlaying)
 
 //            shakeTxt.text = "You lose"
-            shakeTxt.post {shakeTxt.text = "You lose"}
+            textViewAction.post {textViewAction.text = "You lose"}
         }
 
+    }
+
+    private fun resetGameState() {
+        keepPlaying = false
+        flipA = false
+        flipB = false
     }
 
     private fun displayInstruction(rd: Int) {
         when (rd) {
             1 -> {
-                shakeTxt.setText("Shake it!")
+                textViewAction.setText("Shake it!")
             }
 
             2 -> {
-                shakeTxt.setText("Flip it!")
+                textViewAction.setText("Flip it!")
             }
 
             3 -> {
-                shakeTxt.setText("Spin it!")
+                textViewAction.setText("Spin it!")
             }
 
             4 -> {
-                shakeTxt.setText("Tap it!")
+                textViewAction.setText("Tap it!")
             }
         }
 
@@ -120,6 +144,15 @@ class Solo : AppCompatActivity(), SensorEventListener{
                 if (event.values[0].absoluteValue > 2) {
                     keepPlaying = true
                 }
+
+                if (event.values[2] < 0) {
+                    flipA = true
+                }
+
+                if (event.values[2] > 0 && flipA) { // we already flipped once, this is flip back
+                    flipB = true
+                }
+
             }
         }
     }
