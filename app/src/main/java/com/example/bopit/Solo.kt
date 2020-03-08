@@ -6,26 +6,23 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.AsyncTask
-import android.os.AsyncTask.execute
 import android.os.Bundle
-import android.os.CountDownTimer
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.solo_layout.*
-import java.lang.String
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.concurrent.TimeUnit
+import kotlin.math.absoluteValue
 import kotlin.random.Random
 
 
 class Solo : AppCompatActivity(), SensorEventListener{
 
     private var randomNum: Int = 0
-    private var keepplaying: Boolean = true
+    private var keepPlaying: Boolean = true
     var startTime: Int = 0
     var currentTime: Int = 0
-    val interval: Int = 4
+    val interval: Int = 2
 
     // sensor related
     private lateinit var sensorManager: SensorManager
@@ -64,9 +61,11 @@ class Solo : AppCompatActivity(), SensorEventListener{
 
     fun start_game() {
         doAsync{
-            var i: Int = 0
             //loop
             do {
+                // reset keepplaying
+                keepPlaying = false
+
                 startTime = SimpleDateFormat("ss", Locale.getDefault()).format(Date()).toInt()
                 randomNum = Random.nextInt(1, 5)
 
@@ -81,8 +80,10 @@ class Solo : AppCompatActivity(), SensorEventListener{
                 Log.d("PlayGame", "timer ran out")
                 Log.d("Random", randomNum.toString())
 
-                i++
-            } while (i < 5)
+            } while (keepPlaying)
+
+//            shakeTxt.text = "You lose"
+            shakeTxt.post {shakeTxt.text = "You lose"}
         }
 
     }
@@ -114,6 +115,13 @@ class Solo : AppCompatActivity(), SensorEventListener{
 
     override fun onSensorChanged(event: SensorEvent?) {
         // event is returned from system, it has info about the sensor triggered the reading
+        when (event?.sensor?.type) {
+            Sensor.TYPE_ACCELEROMETER -> {
+                if (event.values[0].absoluteValue > 2) {
+                    keepPlaying = true
+                }
+            }
+        }
     }
 
 }
