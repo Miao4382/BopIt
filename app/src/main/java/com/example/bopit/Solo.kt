@@ -1,82 +1,74 @@
 package com.example.bopit
 
+import android.content.Context
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.os.Bundle
-import android.os.CountDownTimer
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.solo_layout.*
-import kotlin.random.Random
-import java.text.SimpleDateFormat
-import java.util.*
 
 
-class Solo : AppCompatActivity() {
+class Solo : AppCompatActivity(), SensorEventListener{
 
     private var randomNum: Int = 0
     private var keepplaying: Boolean = true
     var startTime: Int = 0
     var currentTime: Int = 0
-    val interval: Int = 4
+    val interval: Int = 1
+    var lastActionTime: Long = 0
 
-
-    val timer = object: CountDownTimer(4000, 1000) {
-        override fun onTick(millisUntilFinished: Long) {}
-
-        override fun onFinish() {
-            keepplaying = false
-        }
-    }
-
+    // sensor related
+    private lateinit var sensorManager: SensorManager
+    private var accelerometer: Sensor? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.solo_layout)
 
-        go.setOnClickListener {
+        btnStart.setOnClickListener {
             start_game()
         }
 
+        // get sensor manager
+        this.sensorManager =getSystemService(Context.SENSOR_SERVICE) as SensorManager
 
-
-
+        // get accelerometer sensor and register it
+        sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)?.let {
+            this.accelerometer = it
+        }
+        accelerometer?.also {
+            sensorManager.registerListener(this, it, SensorManager.SENSOR_DELAY_NORMAL)
+        }
 
     }
 
     fun start_game() {
-        var i: Int = 0
-        //loop
-        do {
-            startTime = SimpleDateFormat("ss", Locale.getDefault()).format(Date()).toInt()
-            randomNum = Random.nextInt(1, 4)
-
-            //function for displaying the instruction (takes the random number as input)
-
-            displayInstruction(randomNum)
-
-            do {
-                currentTime = SimpleDateFormat("ss", Locale.getDefault()).format(Date()).toInt()
-            } while (currentTime - startTime < interval)
-
-            Log.d("PlayGame", "timer ran out")
-            Log.d("Random", randomNum.toString())
-
-            i++
-        } while (i < 5)
 
     }
 
     private fun displayInstruction(rd: Int) {
         when (rd) {
-            1 -> { shakeTxt.text = "Shake it!" }
+            1 -> { textViewAction.text = "Shake it!" }
 
-            2 -> { shakeTxt.text = "Spin it" }
+            2 -> { textViewAction.text = "Spin it" }
 
-            3 -> { shakeTxt.text = "Flip it"}
+            3 -> { textViewAction.text = "Flip it"}
 
-            4 -> { shakeTxt.text = "Tap it"}
+            4 -> { textViewAction.text = "Tap it"}
         }
     }
 
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+
+    }
+
+    override fun onSensorChanged(event: SensorEvent?) {
+        if (event != null && event.timestamp - lastActionTime < interval) {
+
+        }
+    }
 
 
 }
