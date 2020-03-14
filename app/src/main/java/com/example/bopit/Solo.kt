@@ -35,6 +35,7 @@ class Solo : AppCompatActivity(), SensorEventListener{
     private var flipB: Boolean = false
     private var tapped: Boolean = false
     private var shaked: Boolean = false
+    private var spinned: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,7 +55,6 @@ class Solo : AppCompatActivity(), SensorEventListener{
             sensorManager.registerListener(this, it, SensorManager.SENSOR_DELAY_NORMAL)
         }
 
-
     }
 
     /* start_game()
@@ -69,7 +69,7 @@ class Solo : AppCompatActivity(), SensorEventListener{
                 resetGameState()
 
                 startTime = (SimpleDateFormat("ss.SSS", Locale.getDefault()).format(Date()).toDouble() * 1000).toInt()
-                instrNum = Random.nextInt(1, 4)
+                instrNum = Random.nextInt(1, 4)     // when instrNum == 4, action: spin it, not supported on physical phone
 
                 //function for displaying the instruction (takes the random number as input)
 
@@ -77,6 +77,7 @@ class Solo : AppCompatActivity(), SensorEventListener{
 
                 do {
                     currentTime = (SimpleDateFormat("ss.SSS", Locale.getDefault()).format(Date()).toDouble() * 1000).toInt()
+                    progressBar.progress = 100 - ((currentTime - startTime).toDouble() / interval * 100).toInt()
                 } while (currentTime - startTime < interval)
 
                 // check if action performed
@@ -105,6 +106,10 @@ class Solo : AppCompatActivity(), SensorEventListener{
         flipB = false
         tapped = false
         shaked = false
+        spinned = false
+
+        // refill progress bar
+        progressBar.progress = 100
     }
 
     private fun displayInstruction(rd: Int) {
@@ -140,17 +145,24 @@ class Solo : AppCompatActivity(), SensorEventListener{
                 }
 
             }
+
+            Sensor.TYPE_GYROSCOPE -> {
+                if (event.values[2].absoluteValue > 2) {
+                    spinned = true
+                }
+            }
         }
     }
 
     // displayRandomFeedBack(): will display random feed back on succeed, also update the score
     private fun displayRandomFeedBack() {
         // show toast
-        when (Random.nextInt(1, 4)) {
+        when (Random.nextInt(1, 5)) {
             1 -> { Toast.makeText(this, "Good Job!", Toast.LENGTH_SHORT).show()}
             2 -> { Toast.makeText(this, "You're Awesome!", Toast.LENGTH_SHORT).show()}
             3 -> { Toast.makeText(this, "Fantastic!", Toast.LENGTH_SHORT).show()}
             4 -> { Toast.makeText(this, "Beautiful!", Toast.LENGTH_SHORT).show()}
+            5 -> { Toast.makeText(this, "Well Done!", Toast.LENGTH_SHORT).show()}
         }
 
     }
@@ -168,6 +180,10 @@ class Solo : AppCompatActivity(), SensorEventListener{
 
             3 -> {  // tap it (tap the toy)
                 keepPlaying = tapped
+            }
+
+            4 -> {  // spin it (spin the phone along z-axis)
+                keepPlaying = spinned
             }
         }
     }
