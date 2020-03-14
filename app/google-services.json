@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "648418626832",
+    "firebase_url": "https://bopit-62b25.firebaseio.com",
+    "project_id": "bopit-62b25",
+    "storage_bucket": "bopit-62b25.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:648418626832:android:b2b42a37cab5985cfb2995",
+        "android_client_info": {
+          "package_name": "com.example.bopit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "648418626832-h5v73mbvdr755t955kk1p81a7d3phkb4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAVCMh106nAJgU7UO9Np0cHXz448wQC00g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "648418626832-h5v73mbvdr755t955kk1p81a7d3phkb4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
