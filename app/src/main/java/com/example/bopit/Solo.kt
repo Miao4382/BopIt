@@ -5,8 +5,10 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.media.MediaPlayer
 import android.os.AsyncTask
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -18,6 +20,7 @@ import kotlin.random.Random
 
 
 class Solo : AppCompatActivity(), SensorEventListener{
+    // constants
     private val initialInterval: Int = 4000
 
     private var instrNum: Int = 0
@@ -39,12 +42,31 @@ class Solo : AppCompatActivity(), SensorEventListener{
     private var shaked: Boolean = false
     private var spinned: Boolean = false
 
+    // media player related
+    private var shakeItPlayer: MediaPlayer? = null
+    private var bopItPlayer: MediaPlayer? = null
+    private var spinItPlayer: MediaPlayer? = null
+    private var flipItPlayer: MediaPlayer? = null
+
+    private var shakePlayed: Boolean = false
+    private var bopPlayed: Boolean = false
+    private var spinPlayed: Boolean = false
+    private var flipPlayed: Boolean = false
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.solo_layout)
 
         btnPlay.setOnClickListener { startGame() }
-        imgViewBopitSolo.setOnClickListener { tapped = true }
+        imgViewBopitSolo.setOnClickListener {
+            tapped = true
+            if (!bopPlayed && instrNum == 3) {
+                bopItPlayer?.start()
+                bopPlayed = true
+            }
+
+        }
 
         // get sensor manager
         this.sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
@@ -64,6 +86,12 @@ class Solo : AppCompatActivity(), SensorEventListener{
         gyroscope?.also {
             sensorManager.registerListener(this, it, SensorManager.SENSOR_DELAY_NORMAL)
         }
+
+        // get media player
+        shakeItPlayer = MediaPlayer.create(this, R.raw.shake_it)
+        bopItPlayer = MediaPlayer.create(this, R.raw.tap_it)
+        spinItPlayer = MediaPlayer.create(this, R.raw.spin_it)
+        flipItPlayer = MediaPlayer.create(this, R.raw.flip_it)
     }
 
     /* start_game()
@@ -125,6 +153,12 @@ class Solo : AppCompatActivity(), SensorEventListener{
         // increase difficulty based on current score
         if (interval > 1500)
             interval -= 300
+
+        // audio player
+        shakePlayed = false
+        bopPlayed = false
+        spinPlayed = false
+        flipPlayed = false
     }
 
     private fun displayInstruction(rd: Int) {
@@ -149,6 +183,11 @@ class Solo : AppCompatActivity(), SensorEventListener{
             Sensor.TYPE_ACCELEROMETER -> {
                 if (event.values[0].absoluteValue > 2) {
                     shaked = true
+                    if (!shakePlayed && instrNum == 1) {
+                        shakeItPlayer?.start()
+                        shakePlayed = true
+                    }
+
                 }
 
                 if (event.values[2] < 0) {
@@ -157,6 +196,11 @@ class Solo : AppCompatActivity(), SensorEventListener{
 
                 if (event.values[2] > 0 && flipA) { // we already flipped once, this is flip back
                     flipB = true
+                    if (!flipPlayed && instrNum == 2) {
+                        flipItPlayer?.start()
+                        flipPlayed = true
+                    }
+
                 }
 
             }
@@ -164,6 +208,11 @@ class Solo : AppCompatActivity(), SensorEventListener{
             Sensor.TYPE_GYROSCOPE -> {
                 if (event.values[2].absoluteValue > 2) {
                     spinned = true
+                    if (!spinPlayed && instrNum == 4) {
+                        spinItPlayer?.start()
+                        spinPlayed = true
+                    }
+
                 }
             }
         }
