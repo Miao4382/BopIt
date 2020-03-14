@@ -24,7 +24,10 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    btnMulti.setOnClickListener {
+      val multi_intent = Intent(this, Multi::class.java)
+      startActivity(multi_intent)
+    }
 
-    //listener for multip
   }
 }
