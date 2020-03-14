@@ -18,17 +18,19 @@ import kotlin.random.Random
 
 
 class Solo : AppCompatActivity(), SensorEventListener{
+    private val initialInterval: Int = 4000
 
     private var instrNum: Int = 0
     private var keepPlaying: Boolean = true
     private var startTime: Int = 0
     private var currentTime: Int = 0
-    private val interval: Int = 2000
+    private var interval: Int = initialInterval
     private var score: Int = 0
 
     // sensor related
     private lateinit var sensorManager: SensorManager
     private var accelerometer: Sensor? = null
+    private var gyroscope: Sensor? = null
 
     // action state recording
     private var flipA: Boolean = false
@@ -55,6 +57,13 @@ class Solo : AppCompatActivity(), SensorEventListener{
             sensorManager.registerListener(this, it, SensorManager.SENSOR_DELAY_NORMAL)
         }
 
+        // get gyroscope and register listener
+        sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE)?.let {
+            this.gyroscope = it
+        }
+        gyroscope?.also {
+            sensorManager.registerListener(this, it, SensorManager.SENSOR_DELAY_NORMAL)
+        }
     }
 
     /* start_game()
@@ -96,6 +105,8 @@ class Solo : AppCompatActivity(), SensorEventListener{
             textViewAction.post {
                 textViewAction.text = "You lose"
                 textViewScore.text = "Final Score: " + score.toString()
+                // reset interval
+                interval = initialInterval
             }
         }
     }
@@ -110,6 +121,10 @@ class Solo : AppCompatActivity(), SensorEventListener{
 
         // refill progress bar
         progressBar.progress = 100
+
+        // increase difficulty based on current score
+        if (interval > 1500)
+            interval -= 300
     }
 
     private fun displayInstruction(rd: Int) {
