@@ -1,21 +1,25 @@
 package com.example.bopit
 
-import android.content.BroadcastReceiver
-import android.content.ContentValues.TAG
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
-import android.hardware.SensorEventListener
-import android.net.wifi.p2p.WifiP2pDevice
-import android.net.wifi.p2p.WifiP2pManager
 import android.os.Bundle
-import android.util.Log
+import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import kotlinx.android.synthetic.main.multi_layout.*
+
 
 class Multi : AppCompatActivity() {
 
+    private var username: String = ""
+    val database = Firebase.database
+
+    private var dbRef: DatabaseReference = Firebase.database.reference
+
+    private val menu: MutableList<String> = mutableListOf()
     /*private val intentFilter = IntentFilter()
 
     private lateinit var channel: WifiP2pManager.Channel
@@ -28,12 +32,51 @@ class Multi : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.multi_layout)
 
-        val database = Firebase.database
-        val myRef = database.getReference("message")
+        //val editText = findViewById<EditText>(R.id.userName)
 
-        myRef.setValue("Hello, World!")
+        btnEnter.setOnClickListener {
+            username = userName.text.toString()
+
+            val myRef = database.getReference("users/$username")
+
+            myRef.setValue(username)
+
+        }
+
+        btnChallenge.setOnClickListener{
+            challenge(username)
+        }
+
+    }
+
+    fun challenge(name: String) {
+
+        var opponentName = opponentName.text.toString()
+
+        //check if the username is entered is
+        val menuListener = object : ValueEventListener {
+
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                menu.clear()
+                dataSnapshot.children.mapNotNullTo(menu) { it.getValue<String>(String::class.java) }
+                if (menu.contains(opponentName)) {
+                    println("ok to start")
+                    //CHECK IF ALREADY CHALLENGED BY THIS USER
+                            //IF SO, START GAME
+                            //ELSE, CREATE CHALLENGE, START GAME, STORE SCORE
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                println("loadPost:onCancelled ${databaseError.toException()}")
+            }
+        }
+
+        dbRef.child("users").addListenerForSingleValueEvent(menuListener)
 
 
+
+        //If authenticated, start the game
     }
 
 }
