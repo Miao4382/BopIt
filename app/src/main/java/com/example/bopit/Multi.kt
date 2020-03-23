@@ -1,5 +1,6 @@
 package com.example.bopit
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
@@ -17,9 +18,11 @@ class Multi : AppCompatActivity() {
     private var username: String = ""
     val database = Firebase.database
 
-    private var dbRef: DatabaseReference = Firebase.database.reference
+    //private var dbRef: DatabaseReference = Firebase.database.reference
 
-    private val menu: MutableList<String> = mutableListOf()
+   // private val menu: MutableList<String> = mutableListOf()
+
+    //private val game_intent = Intent(this, GameCenter::class.java)
     /*private val intentFilter = IntentFilter()
 
     private lateinit var channel: WifiP2pManager.Channel
@@ -41,43 +44,18 @@ class Multi : AppCompatActivity() {
 
             myRef.setValue(username)
 
+            //START INTENT
+            val intent = Intent(this, GameCenter::class.java)
+            intent.putExtra("username", username)
+            startActivity(intent)
+
         }
 
-        btnChallenge.setOnClickListener{
-            challenge(username)
-        }
+
 
     }
 
-    fun challenge(name: String) {
 
-        var opponentName = opponentName.text.toString()
-
-        //check if the username is entered is
-        val menuListener = object : ValueEventListener {
-
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                menu.clear()
-                dataSnapshot.children.mapNotNullTo(menu) { it.getValue<String>(String::class.java) }
-                if (menu.contains(opponentName)) {
-                    println("ok to start")
-                    //CHECK IF ALREADY CHALLENGED BY THIS USER
-                            //IF SO, START GAME
-                            //ELSE, CREATE CHALLENGE, START GAME, STORE SCORE
-                }
-            }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-                println("loadPost:onCancelled ${databaseError.toException()}")
-            }
-        }
-
-        dbRef.child("users").addListenerForSingleValueEvent(menuListener)
-
-
-
-        //If authenticated, start the game
-    }
 
 }
 

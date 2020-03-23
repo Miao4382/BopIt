@@ -30,6 +30,11 @@
             android:screenOrientation="portrait">
 
         </activity>
+        <activity
+            android:name=".GameCenter"
+            android:screenOrientation="portrait">
+
+        </activity>
     </application>
 
 </manifest>

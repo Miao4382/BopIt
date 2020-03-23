@@ -10,7 +10,7 @@
         android:id="@+id/txtViewUserName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Enter a username"
+        android:text="Enter new or existing username"
         android:textSize="18dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/btnChallenge"
@@ -42,54 +42,7 @@
         app:layout_constraintHorizontal_bias="0.889"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
-        android:id="@+id/textViewOppo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Enter name of opponent to challenge"
-        android:textSize="18dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.242"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.668" />
 
-    <EditText
-        android:id="@+id/opponentName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Name"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/btnChallenge"
-        app:layout_constraintHorizontal_bias="0.121"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.772" />
-
-    <Button
-        android:id="@+id/btnChallenge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Challenge"
-        app:layout_constraintBaseline_toBaselineOf="@+id/opponentName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.949"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/btnGames"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="See game"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.912" />
 
     <ImageView
         android:id="@+id/imageView3"
