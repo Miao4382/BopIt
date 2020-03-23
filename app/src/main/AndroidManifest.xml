@@ -35,6 +35,11 @@
             android:screenOrientation="portrait">
 
         </activity>
+        <activity
+            android:name=".MultiGame"
+            android:screenOrientation="portrait">
+
+        </activity>
     </application>
 
 </manifest>

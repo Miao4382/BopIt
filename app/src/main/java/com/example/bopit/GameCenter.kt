@@ -43,20 +43,41 @@ class GameCenter : AppCompatActivity() {
     }
 
 
-    fun addChallenge(username: String?) {
+    fun addChallenge(username: String) {
 
         //Check if the challenge already exists
             //if so, don't create the challenge
             //if not, create the challenge
-
-        //Start the game
-
-        //Record the score
         opponent = opponentName.text.toString()
 
-        val myRef = database.getReference("challenges/$username+$opponent")
+        val challengeListener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                challengeList.clear()
+                dataSnapshot.children.mapNotNullTo(challengeList) { it.getValue<String>(String::class.java) }
+            }
 
-        myRef.setValue("$username+$opponent")
+            override fun onCancelled(databaseError: DatabaseError) {
+                println("loadPost:onCancelled ${databaseError.toException()}")
+            }
+        }
+
+        dbRef.child("challenges").addValueEventListener(challengeListener)
+
+        for ((index, item) in challengeList.withIndex()) {
+            if (item.contains(username) && item.contains(opponent)) {
+                //the challenge already exists
+            } else {
+                //create the challenge between them
+                val myRef = database.getReference("challenges/$username+$opponent")
+                myRef.setValue("$username+0+$opponent+0")
+            }
+        }
+
+        //Start the game
+        start_game()
+
+        //Record the score
+
 
     }
 
@@ -67,8 +88,8 @@ class GameCenter : AppCompatActivity() {
                 challengeList.clear()
                 dataSnapshot.children.mapNotNullTo(challengeList) { it.getValue<String>(String::class.java) }
                 for ((index, item) in challengeList.withIndex()) {
-                    if (item.contains(username))
-                        println("YES! CHALLENGE!")
+                    if (item.contains(username)) {
+                        //TODO: SHOW CHALLENGES
                         //Show challenges view text view
 
                         //NEED TO FIGURE OUT HOW TO DO THIS
@@ -81,7 +102,7 @@ class GameCenter : AppCompatActivity() {
                         //button.setId(index)
 
                         constraintLayout.addView(textview)*/
-
+                    }
                 }
             }
 
@@ -92,6 +113,13 @@ class GameCenter : AppCompatActivity() {
 
         dbRef.child("challenges").addValueEventListener(challengeListener)
 
+    }
+
+    fun start_game() {
+        val intent = Intent(this, MultiGame::class.java)
+        intent.putExtra("username", username)
+        intent.putExtra("opponent", opponent)
+        startActivity(intent)
     }
 
 }
