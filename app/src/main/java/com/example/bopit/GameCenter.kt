@@ -2,11 +2,10 @@ package com.example.bopit
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.marginTop
+import androidx.constraintlayout.widget.ConstraintSet
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -14,7 +13,7 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.game_layout.*
-import kotlinx.android.synthetic.main.multi_layout.*
+
 
 class GameCenter : AppCompatActivity() {
 
@@ -25,6 +24,8 @@ class GameCenter : AppCompatActivity() {
     private var dbRef: DatabaseReference = Firebase.database.reference
 
     private val challengeList: MutableList<String> = mutableListOf()
+    private val displaychallengeList: MutableList<String> = mutableListOf()
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,54 +55,13 @@ class GameCenter : AppCompatActivity() {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 challengeList.clear()
                 dataSnapshot.children.mapNotNullTo(challengeList) { it.getValue<String>(String::class.java) }
-            }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-                println("loadPost:onCancelled ${databaseError.toException()}")
-            }
-        }
-
-        dbRef.child("challenges").addValueEventListener(challengeListener)
-
-        for ((index, item) in challengeList.withIndex()) {
-            if (item.contains(username) && item.contains(opponent)) {
-                //the challenge already exists
-            } else {
-                //create the challenge between them
-                val myRef = database.getReference("challenges/$username+$opponent")
-                myRef.setValue("$username+0+$opponent+0")
-            }
-        }
-
-        //Start the game
-        start_game()
-
-        //Record the score
-
-
-    }
-
-    fun display_challenges() {
-        val challengeListener = object : ValueEventListener {
-
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                challengeList.clear()
-                dataSnapshot.children.mapNotNullTo(challengeList) { it.getValue<String>(String::class.java) }
                 for ((index, item) in challengeList.withIndex()) {
-                    if (item.contains(username)) {
-                        //TODO: SHOW CHALLENGES
-                        //Show challenges view text view
-
-                        //NEED TO FIGURE OUT HOW TO DO THIS
-
-                        //val constraintLayout = findViewById(R.id.constraintLayout) as ConstraintLayout
-
-                        /*val textview = TextView(this@GameCenter)
-                        textview.layoutParams = ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.WRAP_CONTENT, ConstraintLayout.LayoutParams.WRAP_CONTENT)
-                        textview.text = item
-                        //button.setId(index)
-
-                        constraintLayout.addView(textview)*/
+                    if (item.contains(username) && item.contains(opponent)) {
+                        //the challenge already exists
+                    } else {
+                        //create the challenge between them
+                        val myRef = database.getReference("challenges/$username+$opponent")
+                        myRef.setValue("$username+0+$opponent+0")
                     }
                 }
             }
@@ -112,6 +72,59 @@ class GameCenter : AppCompatActivity() {
         }
 
         dbRef.child("challenges").addValueEventListener(challengeListener)
+
+
+        start_game()
+    }
+
+    fun display_challenges() {
+        var counter = 0
+        val displaychallengeListener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                displaychallengeList.clear()
+                dataSnapshot.children.mapNotNullTo(displaychallengeList) { it.getValue<String>(String::class.java) }
+                for ((index, item) in displaychallengeList.withIndex()) {
+                    if (item.contains(username)) {
+                        //TODO: SHOW CHALLENGES
+                        //Show challenges view text view
+
+                        println(item)
+                        //emily+0+daniel+0
+                        //NEED TO FIGURE OUT HOW TO DO THIS
+                        val plus = item.indexOf("+")
+                        println(plus)
+                        var firstuser = item.substring(0, plus)
+                        println(firstuser)
+                        val plus2 = item.indexOf("+", plus+1)
+                        println(plus2)
+                        var firstscore = item.substring(plus+1, plus2)
+                        val plus3 = item.indexOf("+", plus2+1)
+                        var seconduser = item.substring(plus2+1, plus3)
+                        var secondscore = item.substring(plus3+1, item.length)
+                        var mytext = "GAME -- $firstuser's score: $firstscore ~ $seconduser's score: $secondscore"
+
+                        when (counter) {
+                            0 -> tv0.setText(mytext)
+                            1 -> tv1.setText(mytext)
+                            2 -> tv2.setText(mytext)
+                            3 -> tv2.setText(mytext)
+                            4 -> tv2.setText(mytext)
+                            5 -> tv2.setText(mytext)
+                            6 -> tv2.setText(mytext)
+                        }
+
+                        counter++
+
+
+                    }
+                }
+            }
+            override fun onCancelled(databaseError: DatabaseError) {
+                println("loadPost:onCancelled ${databaseError.toException()}")
+            }
+        }
+
+        dbRef.child("challenges").addValueEventListener(displaychallengeListener)
 
     }
 

@@ -1,6 +1,7 @@
 package com.example.bopit
 
 import android.content.Context
+import android.content.Intent
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -82,6 +83,10 @@ class MultiGame : AppCompatActivity(), SensorEventListener{
         super.onCreate(savedInstanceState)
         setContentView(R.layout.multigame_layout)
 
+        val intent = intent
+        username = intent.getStringExtra("username")
+        opponent = intent.getStringExtra("opponent")
+
         btnPlay.setOnClickListener {
             btnPlay.setVisibility(View.GONE)
             startGame()
@@ -98,7 +103,9 @@ class MultiGame : AppCompatActivity(), SensorEventListener{
         }
 
         btnBack.setOnClickListener {
-            //TODO: GO BACK TO GAME CENTER
+            val newintent = Intent(this, GameCenter::class.java)
+            newintent.putExtra("username", username)
+            startActivity(newintent)
            // Go back to the GameCenter, which should hopefully have updated the score
         }
 
@@ -172,9 +179,7 @@ class MultiGame : AppCompatActivity(), SensorEventListener{
                 interval = initialInterval
 
                 //TODO: GET THE NAME OF THE CHALLENGE, from the intent
-                val intent = intent
-                var username = intent.getStringExtra("username")
-                var opponent = intent.getStringExtra("opponent")
+
 
                 //TODO: UPDATE THE SCORE OF THE CHALLENGE for this user
 
@@ -203,7 +208,7 @@ class MultiGame : AppCompatActivity(), SensorEventListener{
                     }
                 }
 
-                dbRef.child("challenges").addValueEventListener(challengeListener)
+                dbRef.child("challenges").addListenerForSingleValueEvent(challengeListener)
 
             }
         }
