@@ -14,10 +14,10 @@
         android:textSize="40sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.721" />
+        app:layout_constraintVertical_bias="0.688" />
 
     <Button
         android:id="@+id/btnPlay"
@@ -26,10 +26,10 @@
         android:text="Play"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.188"
+        app:layout_constraintHorizontal_bias="0.517"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.913" />
+        app:layout_constraintVertical_bias="0.868" />
 
     <TextView
         android:id="@+id/textViewScore"
@@ -47,9 +47,9 @@
         android:id="@+id/imgViewBopitSolo"
         android:layout_width="332dp"
         android:layout_height="319dp"
-        android:layout_marginStart="12dp"
         android:layout_marginTop="15dp"
         app:layout_constraintBottom_toTopOf="@+id/textViewAction"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewScore"
         app:layout_constraintVertical_bias="0.22"
@@ -63,15 +63,18 @@
         android:progress="100"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.808" />
+        app:layout_constraintVertical_bias="0.781" />
 
     <Button
         android:id="@+id/btnBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Back to Game Center"
-        tools:layout_editor_absoluteX="179dp"
-        tools:layout_editor_absoluteY="624dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnPlay" />
 </androidx.constraintlayout.widget.ConstraintLayout>
