@@ -27,7 +27,6 @@ class GameCenter : AppCompatActivity() {
     private val displaychallengeList: MutableList<String> = mutableListOf()
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.game_layout)
@@ -71,7 +70,7 @@ class GameCenter : AppCompatActivity() {
             }
         }
 
-        dbRef.child("challenges").addValueEventListener(challengeListener)
+        dbRef.child("challenges").addListenerForSingleValueEvent(challengeListener)
 
 
         start_game()
@@ -85,18 +84,10 @@ class GameCenter : AppCompatActivity() {
                 dataSnapshot.children.mapNotNullTo(displaychallengeList) { it.getValue<String>(String::class.java) }
                 for ((index, item) in displaychallengeList.withIndex()) {
                     if (item.contains(username)) {
-                        //TODO: SHOW CHALLENGES
-                        //Show challenges view text view
 
-                        println(item)
-                        //emily+0+daniel+0
-                        //NEED TO FIGURE OUT HOW TO DO THIS
                         val plus = item.indexOf("+")
-                        println(plus)
                         var firstuser = item.substring(0, plus)
-                        println(firstuser)
                         val plus2 = item.indexOf("+", plus+1)
-                        println(plus2)
                         var firstscore = item.substring(plus+1, plus2)
                         val plus3 = item.indexOf("+", plus2+1)
                         var seconduser = item.substring(plus2+1, plus3)
@@ -112,10 +103,7 @@ class GameCenter : AppCompatActivity() {
                             5 -> tv2.setText(mytext)
                             6 -> tv2.setText(mytext)
                         }
-
                         counter++
-
-
                     }
                 }
             }
@@ -123,9 +111,7 @@ class GameCenter : AppCompatActivity() {
                 println("loadPost:onCancelled ${databaseError.toException()}")
             }
         }
-
         dbRef.child("challenges").addValueEventListener(displaychallengeListener)
-
     }
 
     fun start_game() {

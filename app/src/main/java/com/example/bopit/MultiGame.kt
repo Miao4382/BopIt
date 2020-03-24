@@ -41,9 +41,6 @@ class MultiGame : AppCompatActivity(), SensorEventListener{
 
     private var dbRef: DatabaseReference = Firebase.database.reference
     private val challengeList: MutableList<String> = mutableListOf()
-    private var newList: MutableList<String> = mutableListOf()
-
-
 
     // constants
     private val initialInterval: Int = 4000
@@ -98,15 +95,14 @@ class MultiGame : AppCompatActivity(), SensorEventListener{
                 bopItPlayer?.start()
                 bopPlayed = true
             }
-
-
         }
 
         btnBack.setOnClickListener {
+            // Go back to the GameCenter, which should hopefully have updated the score
             val newintent = Intent(this, GameCenter::class.java)
             newintent.putExtra("username", username)
             startActivity(newintent)
-           // Go back to the GameCenter, which should hopefully have updated the score
+
         }
 
         // get sensor manager
@@ -172,33 +168,40 @@ class MultiGame : AppCompatActivity(), SensorEventListener{
             } while (keepPlaying)
 
             textViewAction.post {
-                score= 30
                 textViewAction.text = "You lose"
                 textViewScore.text = "Final Score: " + score.toString()
                 // reset interval
                 interval = initialInterval
 
-                //TODO: GET THE NAME OF THE CHALLENGE, from the intent
-
-
-                //TODO: UPDATE THE SCORE OF THE CHALLENGE for this user
-
-
+                //Update the firebase score
                 val challengeListener = object : ValueEventListener {
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
                         challengeList.clear()
                         dataSnapshot.children.mapNotNullTo(challengeList) { it.getValue<String>(String::class.java) }
                         for ((index, item) in challengeList.withIndex()) {
                             if (item.contains(username) && item.contains(opponent)) {
-                                val matchIndex = item.indexOf(username) + username.length + 1
-                                val end_plus = item.indexOf("+", matchIndex)
-                                var stringtoadd = item
 
-                                stringtoadd = stringtoadd.replaceRange(matchIndex, end_plus, score.toString())
+                                if (item.indexOf(username) == 0) {
+                                    val matchIndex = item.indexOf(username) + username.length + 1
+                                    val end_plus = item.indexOf("+", matchIndex)
+                                    var stringtoadd = item
 
-                                val myRef = database.getReference("challenges/$username+$opponent")
-                                myRef.setValue(stringtoadd)
+                                    stringtoadd = stringtoadd.replaceRange(matchIndex, end_plus, score.toString())
+                                    println(stringtoadd)
+                                    val myRef =
+                                        database.getReference("challenges/$username+$opponent")
+                                    myRef.setValue(stringtoadd)
 
+                                }
+                                else {
+                                    val matchIndex = item.indexOf(username) + username.length + 1
+                                    val end_plus = item.length
+                                    var stringtoadd = item
+                                    stringtoadd = stringtoadd.replaceRange(matchIndex, end_plus, score.toString())
+                                    println(stringtoadd)
+                                    val myRef = database.getReference("challenges/$opponent+$username")
+                                    myRef.setValue(stringtoadd)
+                                }
                             }
                         }
                     }
@@ -207,9 +210,7 @@ class MultiGame : AppCompatActivity(), SensorEventListener{
                         println("loadPost:onCancelled ${databaseError.toException()}")
                     }
                 }
-
-                dbRef.child("challenges").addListenerForSingleValueEvent(challengeListener)
-
+                dbRef.child("challenges").addValueEventListener(challengeListener)
             }
         }
     }
@@ -327,15 +328,3 @@ class MultiGame : AppCompatActivity(), SensorEventListener{
         }
     }
 }
-
-/*
-class DoAsync(val handler: () -> Unit) : AsyncTask<Void, Void, Void>() {
-    init {
-        execute()
-    }
-
-    override fun doInBackground(vararg params: Void?): Void? {
-        handler()
-        return null
-    }
-}*/
