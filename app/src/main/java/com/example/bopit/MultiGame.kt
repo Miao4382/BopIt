@@ -1,3 +1,11 @@
+/*
+THe multiplayer game
+
+Very similar to Solo.kt, but writes the score to the firebase database depending
+on the users involved
+
+ */
+
 package com.example.bopit
 
 import android.content.Context
@@ -7,10 +15,7 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.media.MediaPlayer
-import android.os.AsyncTask
 import android.os.Bundle
-import android.provider.MediaStore
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -176,24 +181,27 @@ class MultiGame : AppCompatActivity(), SensorEventListener{
                 //Update the firebase score
                 val challengeListener = object : ValueEventListener {
                     override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        //Get the data from the snapshot
                         challengeList.clear()
                         dataSnapshot.children.mapNotNullTo(challengeList) { it.getValue<String>(String::class.java) }
                         for ((index, item) in challengeList.withIndex()) {
                             if (item.contains(username) && item.contains(opponent)) {
 
+                                //If the challenge is listed with the username first
                                 if (item.indexOf(username) == 0) {
+                                    //Find the proper index to update the score in the string
                                     val matchIndex = item.indexOf(username) + username.length + 1
                                     val end_plus = item.indexOf("+", matchIndex)
                                     var stringtoadd = item
 
+                                    //Replace the old score with the new score
                                     stringtoadd = stringtoadd.replaceRange(matchIndex, end_plus, score.toString())
-                                    println(stringtoadd)
                                     val myRef =
                                         database.getReference("challenges/$username+$opponent")
                                     myRef.setValue(stringtoadd)
 
                                 }
-                                else {
+                                else { //The challenge is written with the opponent first
                                     val matchIndex = item.indexOf(username) + username.length + 1
                                     val end_plus = item.length
                                     var stringtoadd = item

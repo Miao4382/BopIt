@@ -1,3 +1,14 @@
+/*
+The solo player file
+
+Upon starting the game, the game prompts the user for an action
+
+The user has a certain time to complete the action
+
+If they fail, the score is displayed.
+ */
+
+
 package com.example.bopit
 
 import android.content.Context
@@ -8,8 +19,6 @@ import android.hardware.SensorManager
 import android.media.MediaPlayer
 import android.os.AsyncTask
 import android.os.Bundle
-import android.provider.MediaStore
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.solo_layout.*

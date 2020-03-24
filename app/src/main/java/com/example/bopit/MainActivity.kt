@@ -1,3 +1,10 @@
+/*
+The Main activity
+
+Displays two buttons, one for single player and one for multiplayer
+ */
+
+
 package com.example.bopit
 
 import android.content.Intent
@@ -18,13 +25,14 @@ class MainActivity : AppCompatActivity() {
     Log.d("onCreate", (num * 1000).toString())
     //listener for solo
     btnSolo.setOnClickListener {
-        //link to Solo no
+        //link to Solo activity
       val intent = Intent(this, Solo::class.java)
       startActivity(intent)
     }
 
 
     btnMulti.setOnClickListener {
+      //link to multiplayer activity
       val multi_intent = Intent(this, Multi::class.java)
       startActivity(multi_intent)
     }

@@ -1,11 +1,19 @@
+/*
+The "Game Center" Page
+
+This page displays all the current games and scores the user has between other people
+
+The user, at the top of the page, enters the specific username of the person
+they want to play. The button will then launch the game.
+
+ */
+
+
 package com.example.bopit
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.ConstraintSet
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
@@ -34,7 +42,6 @@ class GameCenter : AppCompatActivity() {
         val intent = intent
         username = intent.getStringExtra("username")
 
-
         display_challenges()
 
         btnChallenge.setOnClickListener{
@@ -50,9 +57,12 @@ class GameCenter : AppCompatActivity() {
             //if not, create the challenge
         opponent = opponentName.text.toString()
 
+        //Create a ValueEventListener to read from the database
         val challengeListener = object : ValueEventListener {
+            //On datachange, get a datasnapshot
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 challengeList.clear()
+                //Map the data into a list
                 dataSnapshot.children.mapNotNullTo(challengeList) { it.getValue<String>(String::class.java) }
                 for ((index, item) in challengeList.withIndex()) {
                     if (item.contains(username) && item.contains(opponent)) {
@@ -77,6 +87,8 @@ class GameCenter : AppCompatActivity() {
     }
 
     fun display_challenges() {
+        //Displays the current games in text views
+
         var counter = 0
         val displaychallengeListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -85,6 +97,7 @@ class GameCenter : AppCompatActivity() {
                 for ((index, item) in displaychallengeList.withIndex()) {
                     if (item.contains(username)) {
 
+                        //Parse the string to get the usernames and scores
                         val plus = item.indexOf("+")
                         var firstuser = item.substring(0, plus)
                         val plus2 = item.indexOf("+", plus+1)
@@ -94,6 +107,7 @@ class GameCenter : AppCompatActivity() {
                         var secondscore = item.substring(plus3+1, item.length)
                         var mytext = "GAME -- $firstuser's score: $firstscore ~ $seconduser's score: $secondscore"
 
+                        //Set the text of the text views
                         when (counter) {
                             0 -> tv0.setText(mytext)
                             1 -> tv1.setText(mytext)
@@ -115,6 +129,7 @@ class GameCenter : AppCompatActivity() {
     }
 
     fun start_game() {
+        //Launches the "multigame" activity, which is just solo player but with firebase stuff in it
         val intent = Intent(this, MultiGame::class.java)
         intent.putExtra("username", username)
         intent.putExtra("opponent", opponent)
