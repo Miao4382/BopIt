@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#FFEB3B">
 
     <TextView
         android:id="@+id/textViewAction"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/fontdiner_swanky"
         android:text="Action"
+        android:textColor="#4155C5"
         android:textSize="40sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -23,7 +25,10 @@
         android:id="@+id/btnPlay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="#4CAF50"
+        android:fontFamily="@font/fontdiner_swanky"
         android:text="Play"
+        android:textColor="#000000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -34,7 +39,9 @@
         android:id="@+id/textViewScore"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/fontdiner_swanky"
         android:text="Score"
+        android:textColor="#4155C5"
         android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/textViewAction"
         app:layout_constraintEnd_toEndOf="parent"
@@ -45,14 +52,15 @@
 
     <ImageView
         android:id="@+id/imgViewBopitSolo"
-        android:layout_width="332dp"
-        android:layout_height="319dp"
-        android:layout_marginStart="12dp"
+        android:layout_width="370dp"
+        android:layout_height="351dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="15dp"
+        android:tint="#F14A4A"
         app:layout_constraintBottom_toTopOf="@+id/textViewAction"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewScore"
-        app:layout_constraintVertical_bias="0.22"
+        app:layout_constraintVertical_bias="0.204"
         app:srcCompat="@drawable/bopit" />
 
     <ProgressBar
@@ -61,6 +69,7 @@
         android:layout_width="210dp"
         android:layout_height="40dp"
         android:progress="100"
+        android:progressTint="#4155C5"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

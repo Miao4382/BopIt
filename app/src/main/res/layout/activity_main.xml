@@ -1,50 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
+    android:background="#FFEB3B"
     tools:context=".MainActivity">
 
     <Button
         android:id="@+id/btnSolo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="89dp"
-        android:layout_marginEnd="89dp"
-        android:layout_marginBottom="137dp"
-        android:backgroundTint="#2196F3"
-        android:fontFamily="sans-serif-light"
+        android:layout_width="196dp"
+        android:layout_height="116dp"
+
+        android:layout_marginTop="8dp"
+        android:backgroundTint="#4CAF50"
+        android:fontFamily="@font/fontdiner_swanky"
         android:text="Solo-Player"
-        android:textSize="24sp" />
+        android:textSize="20sp"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
     <Button
         android:id="@+id/btnMulti"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="60dp"
+        android:layout_width="190dp"
+        android:layout_height="107dp"
+
+        android:background="#4CAF50"
+        android:fontFamily="@font/fontdiner_swanky"
         android:text="Multi-player"
-        android:textSize="24sp" />
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnSolo"
+        app:layout_constraintVertical_bias="0.089" />
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="366dp"
-        android:layout_above="@+id/btnSolo"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="6dp"
-        android:layout_marginTop="23dp"
-        android:layout_marginBottom="62dp"
+        android:layout_width="335dp"
+        android:layout_height="304dp"
+
+
+        android:alpha="0.9"
+        android:tint="#F14A4A"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.039"
         app:srcCompat="@drawable/bopit" />
 
-</RelativeLayout>
+    <TextView
+        android:id="@+id/bopit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/fontdiner_swanky"
+        android:text="BopIt!"
+        android:textColor="#4155C5"
+        android:textSize="100sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.52"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.138" />
+
+    <TextView
+        android:id="@+id/forandroid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/fontdiner_swanky"
+        android:text="for android"
+        android:textColor="#4155C5"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.842"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.301" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
