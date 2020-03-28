@@ -5,7 +5,8 @@
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.bopit.GameCenter">
+    tools:context="com.example.bopit.GameCenter"
+    android:background="#FFEB3B" >
 
     <Button
         android:id="@+id/btnChallenge"
@@ -13,6 +14,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
         android:text="PLAY"
+        android:backgroundTint="#4CAF50"
+        android:fontFamily="@font/fontdiner_swanky"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.308"
         app:layout_constraintStart_toEndOf="@+id/opponentName"
@@ -20,11 +23,12 @@
 
     <EditText
         android:id="@+id/opponentName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="249dp"
+        android:layout_height="53dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="40dp"
         android:ems="10"
+        android:fontFamily="@font/fontdiner_swanky"
         android:hint="Opponent Name"
         android:inputType="textPersonName"
         app:layout_constraintStart_toStartOf="parent"
@@ -37,6 +41,8 @@
         android:layout_marginStart="28dp"
         android:text="Your Games:"
         android:textSize="24sp"
+        android:textColor="#4155C5"
+        android:fontFamily="@font/fontdiner_swanky"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -48,6 +54,8 @@
         android:layout_height="49dp"
         android:layout_marginStart="40dp"
         android:layout_marginTop="180dp"
+        android:fontFamily="@font/fontdiner_swanky"
+        android:textColor="#4155C5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -57,6 +65,8 @@
         android:layout_height="50dp"
         android:layout_marginStart="40dp"
         android:layout_marginTop="248dp"
+        android:fontFamily="@font/fontdiner_swanky"
+        android:textColor="#4155C5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -66,6 +76,8 @@
         android:layout_height="50dp"
         android:layout_marginStart="40dp"
         android:layout_marginTop="316dp"
+        android:fontFamily="@font/fontdiner_swanky"
+        android:textColor="#4155C5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -84,6 +96,8 @@
         android:layout_height="50dp"
         android:layout_marginStart="36dp"
         android:layout_marginTop="452dp"
+        android:fontFamily="@font/fontdiner_swanky"
+        android:textColor="#4155C5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -93,6 +107,8 @@
         android:layout_height="46dp"
         android:layout_marginStart="36dp"
         android:layout_marginTop="520dp"
+        android:fontFamily="@font/fontdiner_swanky"
+        android:textColor="#4155C5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -102,6 +118,8 @@
         android:layout_height="45dp"
         android:layout_marginStart="36dp"
         android:layout_marginTop="584dp"
+        android:fontFamily="@font/fontdiner_swanky"
+        android:textColor="#4155C5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
