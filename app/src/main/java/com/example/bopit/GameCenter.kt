@@ -64,14 +64,14 @@ class GameCenter : AppCompatActivity() {
                 challengeList.clear()
                 //Map the data into a list
                 dataSnapshot.children.mapNotNullTo(challengeList) { it.getValue<String>(String::class.java) }
-                for ((index, item) in challengeList.withIndex()) {
-                    if (item.contains(username) && item.contains(opponent)) {
-                        //the challenge already exists
-                    } else {
+                for (item in challengeList) {
+                    //Check if a challenge exists between the two users
+                    if (!(item.contains(username) && item.contains(opponent))) {
                         //create the challenge between them
                         val myRef = database.getReference("challenges/$username+$opponent")
                         myRef.setValue("$username+0+$opponent+0")
                     }
+                    //else do nothing, it already exists
                 }
             }
 
@@ -80,8 +80,8 @@ class GameCenter : AppCompatActivity() {
             }
         }
 
+        //Add the listener
         dbRef.child("challenges").addListenerForSingleValueEvent(challengeListener)
-
 
         start_game()
     }
@@ -98,25 +98,11 @@ class GameCenter : AppCompatActivity() {
                     if (item.contains(username)) {
 
                         //Parse the string to get the usernames and scores
-                        val plus = item.indexOf("+")
-                        var firstuser = item.substring(0, plus)
-                        val plus2 = item.indexOf("+", plus+1)
-                        var firstscore = item.substring(plus+1, plus2)
-                        val plus3 = item.indexOf("+", plus2+1)
-                        var seconduser = item.substring(plus2+1, plus3)
-                        var secondscore = item.substring(plus3+1, item.length)
-                        var mytext = "GAME -- $firstuser's score: $firstscore ~ $seconduser's score: $secondscore"
+                        var mytext = parseString(item)
 
+                        setTextView(mytext, counter)
                         //Set the text of the text views
-                        when (counter) {
-                            0 -> tv0.setText(mytext)
-                            1 -> tv1.setText(mytext)
-                            2 -> tv2.setText(mytext)
-                            3 -> tv2.setText(mytext)
-                            4 -> tv2.setText(mytext)
-                            5 -> tv2.setText(mytext)
-                            6 -> tv2.setText(mytext)
-                        }
+
                         counter++
                     }
                 }
@@ -134,6 +120,31 @@ class GameCenter : AppCompatActivity() {
         intent.putExtra("username", username)
         intent.putExtra("opponent", opponent)
         startActivity(intent)
+    }
+
+    fun parseString(item: String) : String {
+        val plus = item.indexOf("+")
+        val firstuser = item.substring(0, plus)
+        val plus2 = item.indexOf("+", plus+1)
+        val firstscore = item.substring(plus+1, plus2)
+        val plus3 = item.indexOf("+", plus2+1)
+        val seconduser = item.substring(plus2+1, plus3)
+        val secondscore = item.substring(plus3+1, item.length)
+        val mytext = "GAME -- $firstuser's score: $firstscore ~ $seconduser's score: $secondscore"
+
+        return mytext
+    }
+
+    fun setTextView(mytext: String, counter: Int) {
+        when (counter) {
+            0 -> tv0.setText(mytext)
+            1 -> tv1.setText(mytext)
+            2 -> tv2.setText(mytext)
+            3 -> tv2.setText(mytext)
+            4 -> tv2.setText(mytext)
+            5 -> tv2.setText(mytext)
+            6 -> tv2.setText(mytext)
+        }
     }
 
 }

@@ -186,11 +186,10 @@ class MultiGame : AppCompatActivity(), SensorEventListener{
                         dataSnapshot.children.mapNotNullTo(challengeList) { it.getValue<String>(String::class.java) }
                         for ((index, item) in challengeList.withIndex()) {
                             if (item.contains(username) && item.contains(opponent)) {
-
+                                val matchIndex = item.indexOf(username) + username.length + 1
                                 //If the challenge is listed with the username first
                                 if (item.indexOf(username) == 0) {
                                     //Find the proper index to update the score in the string
-                                    val matchIndex = item.indexOf(username) + username.length + 1
                                     val end_plus = item.indexOf("+", matchIndex)
                                     var stringtoadd = item
 
@@ -202,11 +201,9 @@ class MultiGame : AppCompatActivity(), SensorEventListener{
 
                                 }
                                 else { //The challenge is written with the opponent first
-                                    val matchIndex = item.indexOf(username) + username.length + 1
                                     val end_plus = item.length
                                     var stringtoadd = item
                                     stringtoadd = stringtoadd.replaceRange(matchIndex, end_plus, score.toString())
-                                    println(stringtoadd)
                                     val myRef = database.getReference("challenges/$opponent+$username")
                                     myRef.setValue(stringtoadd)
                                 }
